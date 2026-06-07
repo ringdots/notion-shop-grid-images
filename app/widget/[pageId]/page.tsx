@@ -28,7 +28,9 @@ export default async function WidgetPage({
   return (
     <div
       style={{
-        padding: 4,
+        margin: 0,
+        padding: 0,
+        overflow: "hidden",
       }}
     >
       <div
@@ -42,14 +44,19 @@ export default async function WidgetPage({
         {data.thumbnails?.map(
           (thumb: any, i: number) => (
             <img
-              key={i}
-              src={thumb.src}
-              alt=""
-              style={{
+            key={i}
+            src={`/api/image?url=${encodeURIComponent(
+            thumb.src
+            )}`}
+            alt={thumb.alt}
+            crossOrigin="anonymous"
+            referrerPolicy="no-referrer"
+            loading="lazy"
+            style={{
                 width: "100%",
                 aspectRatio: "1/1",
                 objectFit: "cover",
-              }}
+            }}
             />
           )
         )}
