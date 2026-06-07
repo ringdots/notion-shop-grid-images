@@ -1,25 +1,25 @@
-export default function Page() {
+import { notion } from "@/lib/notion";
+
+export default async function Page() {
+  const result = await notion.dataSources.query({
+    data_source_id: process.env.NOTION_DATABASE_ID!,
+  });
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "4px",
-        maxWidth: "600px",
-        margin: "0 auto",
-      }}
-    >
-      {Array.from({ length: 9 }).map((_, i) => (
-        <img
-          key={i}
-          src={`https://picsum.photos/300?random=${i}`}
-          alt=""
-          style={{
-            width: "100%",
-            aspectRatio: "1",
-            objectFit: "cover",
-          }}
-        />
+    <div>
+      {result.results.map((item: any) => (
+        <div key={item.id}>
+          <h2>
+            {item.properties["이름"].title[0]?.plain_text}
+          </h2>
+
+          <a
+            href={item.properties.instagram.url}
+            target="_blank"
+          >
+            Instagram
+          </a>
+        </div>
       ))}
     </div>
   );
