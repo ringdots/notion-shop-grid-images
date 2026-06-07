@@ -34,5 +34,7 @@ export async function GET(req: Request) {
 
   await browser.close();
 
-  return Response.json(thumbnails);
+  return Response.json({
+    thumbnails,
+  });
 }

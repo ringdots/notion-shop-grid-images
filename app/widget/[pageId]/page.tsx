@@ -1,14 +1,10 @@
 import { notion } from "@/lib/notion";
 
-type Props = {
-  params: Promise<{
-    pageId: string;
-  }>;
-};
-
 export default async function WidgetPage({
   params,
-}: Props) {
+}: {
+  params: Promise<{ pageId: string }>;
+}) {
   const { pageId } = await params;
 
   const page: any = await notion.pages.retrieve({
@@ -18,32 +14,41 @@ export default async function WidgetPage({
   const instagram =
     page.properties.instagram?.url;
 
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SITE_URL}/api/instagram?instagram=${encodeURIComponent(
+      instagram
+    )}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  const data = await res.json();
+
   return (
     <div
       style={{
-        padding: 12,
-        fontSize: 14,
+        padding: 4,
       }}
     >
-      <h3>Instagram Grid</h3>
-
-      <p>{instagram}</p>
-
       <div
         style={{
           display: "grid",
           gridTemplateColumns:
-            "repeat(3, 1fr)",
-          gap: 4,
+            "repeat(3,1fr)",
+          gap: 2,
         }}
       >
-        {Array.from({ length: 9 }).map(
-          (_, i) => (
-            <div
+        {data.thumbnails?.map(
+          (thumb: any, i: number) => (
+            <img
               key={i}
+              src={thumb.src}
+              alt=""
               style={{
-                aspectRatio: "1 / 1",
-                background: "#eee",
+                width: "100%",
+                aspectRatio: "1/1",
+                objectFit: "cover",
               }}
             />
           )
