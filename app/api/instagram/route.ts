@@ -1,4 +1,5 @@
-import { chromium } from "playwright";
+import { chromium } from "playwright-core";
+import chromiumPkg from "@sparticuz/chromium";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -14,6 +15,9 @@ export async function GET(req: Request) {
   }
 
   const browser = await chromium.launch({
+    args: chromiumPkg.args,
+    executablePath:
+      await chromiumPkg.executablePath(),
     headless: true,
   });
 
