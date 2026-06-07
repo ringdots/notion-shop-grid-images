@@ -1,14 +1,17 @@
 import { notion } from "@/lib/notion";
-import { chromium } from "playwright";
+import { chromium } from "playwright-core";
+import chromiumPkg from "@sparticuz/chromium";
 
 export async function GET() {
   const result = await notion.dataSources.query({
     data_source_id: process.env.NOTION_DATABASE_ID!,
   });
 
-  const browser = await chromium.launch({
+    const browser = await chromium.launch({
+    args: chromiumPkg.args,
+    executablePath: await chromiumPkg.executablePath(),
     headless: true,
-  });
+    });
 
   for (const item of result.results as any[]) {
     const instagram =
